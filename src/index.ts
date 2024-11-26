@@ -1,3 +1,2 @@
-import { rateLimiter } from "./rate.limiter";
-
-export { rateLimiter as RateLimiter };
+export { RateLimiterOptions } from "./interfaces/rate-limiter-options.interface";
+export { rateLimiter } from "./rate.limiter";

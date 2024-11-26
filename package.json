@@ -1,5 +1,6 @@
 {
-  "name": "rate-limiter-express",
+  "name": "@canmertinyo/rate-limit-express",
+  "description": "A simple rate-limiting middleware for Express.js",
   "version": "1.0.0",
   "main": "dist/index.js",
   "license": "MIT",
@@ -7,9 +8,8 @@
     "scripts": {
     "build": "tsc"
   },
-  "keywords": [],
-  "author": "",
-  "description": "",
+  "keywords": ["ratelimiter-express"],
+  "author": "c4nzin",
   "devDependencies": {
     "@types/express": "^5.0.0",
     "typescript": "^5.7.2"
