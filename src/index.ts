@@ -1,3 +1,3 @@
 import { rateLimiter } from "./rate.limiter";
 
-export { rateLimiter };
+export { rateLimiter as RateLimiter };

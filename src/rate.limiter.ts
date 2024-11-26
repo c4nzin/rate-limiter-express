@@ -3,7 +3,6 @@ import { getIp, getTimestamp } from "./utils";
 import { Store } from "./types/store.type";
 import { RateLimiterOptions } from "./interfaces/rate-limiter-options.interface";
 
-//ADD REDIS support
 const store: Store = {};
 
 export function rateLimiter(options: RateLimiterOptions) {
