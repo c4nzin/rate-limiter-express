@@ -1,14 +1,20 @@
 {
   "name": "@canmertinyo/rate-limit-express",
   "description": "A simple rate-limiting middleware for Express.js",
-  "version": "1.0.0",
+  "version": "1.0.6",
   "main": "dist/index.js",
   "license": "MIT",
   "types": "dist/index.d.ts",
-    "scripts": {
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/c4nzin/rate-limiter-express"
+  },
+  "scripts": {
     "build": "tsc"
   },
-  "keywords": ["ratelimiter-express"],
+  "keywords": [
+    "ratelimiter-express"
+  ],
   "author": "c4nzin",
   "devDependencies": {
     "@types/express": "^5.0.0",
