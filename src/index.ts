@@ -1,2 +1,2 @@
-export { RateLimiterOptions } from "./interfaces/rate-limiter-options.interface";
+export * from "./interfaces";
 export { rateLimiter } from "./rate.limiter";

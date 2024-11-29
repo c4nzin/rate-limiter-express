@@ -1,4 +1,4 @@
-import { IRateLimiter } from "../rate.limiter";
+import { RateLimiter } from "./rate-limiter.interface";
 
 /**
  * Options for the rate limiter configuration.
@@ -9,5 +9,5 @@ import { IRateLimiter } from "../rate.limiter";
 export interface RateLimiterOptions {
   ms: number;
   maxRequest: number;
-  storage?: IRateLimiter;
+  storage?: RateLimiter;
 }

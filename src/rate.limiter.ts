@@ -1,41 +1,39 @@
 import { Request, Response, NextFunction } from "express";
 import { getIp, getTimestamp } from "./utils";
-import { Store } from "./types/store.type";
 import { RateLimiterOptions } from "./interfaces/rate-limiter-options.interface";
+import { InMemoryStorage } from "./storages/in-memory.storage";
+
+const inMemoryStorage = new InMemoryStorage();
 
 export function rateLimiter(options: RateLimiterOptions) {
-  var storage = options.storage || ({} as IRateLimiter);
-
   return (req: Request, res: Response, next: NextFunction) => {
     const ip = getIp(req);
     const currentTime = getTimestamp();
     const startTime = currentTime - options.ms;
+    var storage = options.storage ?? inMemoryStorage;
 
     var record = storage.getRateLimitRecord(ip);
 
-    if (!record || record.timestamp < startTime) {
-      storage.setRateLimitRecord({ count: 1, timestamp: currentTime });
+    if (!record) {
+      record = storage.createRateLimitRecord({
+        key: ip,
+        count: 0,
+        timestamp: currentTime,
+      });
+    }
+
+    if (startTime > record.timestamp) {
+      record = storage.updateRateLimitRecord(ip, currentTime, 1);
+      return next();
     }
 
     if (record.count < options.maxRequest) {
-      storage.increment();
-      next();
-    } else {
-      res
-        .status(420)
-        .json({ message: "Too many requests, please try again later." });
+      record = storage.increment(record.key);
+      return next();
     }
+
+    res
+      .status(420)
+      .json({ message: "Too many requests, please try again later." });
   };
-}
-
-export interface IRateLimitRecord {
-  key: string;
-  count: number;
-  timestamp: number;
-}
-
-export interface IRateLimiter {
-  getRateLimitRecord(key: string): IRateLimitRecord | undefined;
-  setRateLimitRecord(record: IRateLimitRecord): void;
-  increment(): void;
 }
