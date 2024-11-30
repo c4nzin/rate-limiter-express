@@ -7,3 +7,6 @@ export const getIp = (req: Request): string => {
 export const getTimestamp = (): number => {
   return new Date().getTime();
 };
+
+export const isFunction = (object: any): boolean =>
+  typeof object === "function";

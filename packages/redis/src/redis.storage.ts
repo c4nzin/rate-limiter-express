@@ -2,10 +2,13 @@ import { RateLimiter, RateLimitRecord } from "@canmertinyo/rate-limiter-core";
 import Redis, { RedisOptions } from "ioredis";
 
 export class RedisStorage implements RateLimiter {
-  private redis: Redis;
+  private redis!: Redis;
 
-  constructor(options: RedisOptions) {
-    this.redis = new Redis(options);
+  constructor(private readonly options: RedisOptions) {}
+
+  async initialize(): Promise<RateLimiter> {
+    this.redis = new Redis(this.options);
+    return this;
   }
 
   public async getRateLimitRecord(

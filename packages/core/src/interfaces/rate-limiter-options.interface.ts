@@ -22,4 +22,6 @@ export interface RateLimiterOptions {
   keyGenerator?: ExpressCallback<string> | Promise<ExpressCallback<string>>;
   skip?: ExpressCallback<boolean> | Promise<ExpressCallback<boolean>>;
   requestPropertyName?: string;
+  errorHandler?: ExpressCallback<void> | Promise<ExpressCallback<void>>;
+  passOnStoreError?: boolean;
 }

@@ -6,10 +6,13 @@ export class MongoStorage implements RateLimiter {
   private model: mongoose.Model<RateLimitRecord> = RateLimitModel;
 
   constructor(
-    public uri: string = "mongodb://localhost:27017/rate-limits",
-    options?: mongoose.ConnectOptions
-  ) {
-    mongoose.connect(uri, options);
+    private readonly uri: string = "mongodb://localhost:27017/rate-limits",
+    private readonly options?: mongoose.ConnectOptions
+  ) {}
+
+  async initialize(): Promise<RateLimiter> {
+    await mongoose.connect(this.uri, this.options);
+    return this;
   }
 
   public async getRateLimitRecord(

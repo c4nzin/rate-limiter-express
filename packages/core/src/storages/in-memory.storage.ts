@@ -1,7 +1,12 @@
 import { RateLimiter, RateLimitRecord } from "../interfaces";
 
 export class InMemoryStorage implements RateLimiter {
-  private store: RateLimitRecord[] = [];
+  private store!: RateLimitRecord[];
+
+  async initialize(): Promise<RateLimiter> {
+    this.store = [];
+    return this;
+  }
 
   public async getRateLimitRecord(
     key: string
