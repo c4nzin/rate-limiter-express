@@ -1,21 +1,11 @@
-import Redis from "ioredis";
-import { RateLimiter, RateLimitRecord, RedisConfig } from "../interfaces";
+import { RateLimiter, RateLimitRecord } from "@canmertinyo/rate-limiter-core";
+import Redis, { RedisOptions } from "ioredis";
 
 export class RedisStorage implements RateLimiter {
   private redis: Redis;
 
-  constructor(redisConfig: RedisConfig) {
-    const { host, port, db, password, username } = redisConfig;
-
-    const resolvedPort = port ? port : 6379;
-
-    this.redis = new Redis({
-      host,
-      port: resolvedPort,
-      db,
-      password,
-      username,
-    });
+  constructor(options: RedisOptions) {
+    this.redis = new Redis(options);
   }
 
   public async getRateLimitRecord(
@@ -28,7 +18,6 @@ export class RedisStorage implements RateLimiter {
   public async createRateLimitRecord(
     record: RateLimitRecord
   ): Promise<RateLimitRecord> {
-    //json objesine döndürmeden başka bir yol gibi..
     await this.redis.set(record.key, JSON.stringify(record));
     return record;
   }

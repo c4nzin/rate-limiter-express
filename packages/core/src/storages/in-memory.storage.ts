@@ -1,5 +1,4 @@
-import { RateLimitRecord } from "../interfaces/rate-limit-record.interface";
-import { RateLimiter } from "../interfaces/rate-limiter.interface";
+import { RateLimiter, RateLimitRecord } from "../interfaces";
 
 export class InMemoryStorage implements RateLimiter {
   private store: RateLimitRecord[] = [];
@@ -25,7 +24,6 @@ export class InMemoryStorage implements RateLimiter {
     let index = this.store.findIndex((x) => x.key === key);
     this.store[index].count = count;
     this.store[index].timestamp = timestamp;
-
     return this.store[index];
   }
 

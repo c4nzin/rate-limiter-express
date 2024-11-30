@@ -4,8 +4,8 @@
     "module": "CommonJS",
     "declaration": true,
     "outDir": "./dist",
-    "rootDir": "./",
     "strict": true
   },
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }

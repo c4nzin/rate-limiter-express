@@ -1,21 +1,15 @@
-import { RateLimiter, RateLimitRecord } from "../interfaces";
+import { RateLimiter, RateLimitRecord } from "@canmertinyo/rate-limiter-core";
 import mongoose from "mongoose";
 import { RateLimitModel } from "./schemas/rate-limit.schema";
 
 export class MongoStorage implements RateLimiter {
-  private model: mongoose.Model<RateLimitRecord>;
+  private model: mongoose.Model<RateLimitRecord> = RateLimitModel;
 
-  constructor(public mongoDbUrl: string = "mongodb://127.0.0.1:27017") {
-    mongoose
-      .connect(mongoDbUrl)
-      .then(() => {
-        console.log("Db connected.");
-      })
-      .catch((err) => {
-        console.log("Db failed to connect.", err);
-      });
-
-    this.model = RateLimitModel;
+  constructor(
+    public uri: string = "mongodb://localhost:27017/rate-limits",
+    options?: mongoose.ConnectOptions
+  ) {
+    mongoose.connect(uri, options);
   }
 
   public async getRateLimitRecord(
@@ -23,7 +17,11 @@ export class MongoStorage implements RateLimiter {
   ): Promise<RateLimitRecord | undefined> {
     const record = await this.model.findOne({ key });
 
-    return record ? record.toObject() : undefined;
+    if (!record) return;
+
+    var { _id, ...object } = record.toObject();
+
+    return record ? object : undefined;
   }
 
   public async createRateLimitRecord(
@@ -32,7 +30,9 @@ export class MongoStorage implements RateLimiter {
     const newRecord = await this.model.create(record);
     newRecord.save();
 
-    return newRecord.toObject() as RateLimitRecord;
+    var { _id, ...object } = newRecord.toObject();
+
+    return object as RateLimitRecord;
   }
 
   public async updateRateLimitRecord(
@@ -49,26 +49,32 @@ export class MongoStorage implements RateLimiter {
       {
         new: true,
       }
-    )!;
+    );
 
     if (!record) {
       throw new Error("No record found.");
     }
 
-    return record.toObject() as RateLimitRecord;
+    var { _id, ...object } = record.toObject();
+
+    return object as RateLimitRecord;
   }
 
   public async increment(key: string): Promise<RateLimitRecord> {
     const record = await this.model.findOneAndUpdate(
       { key },
       { $inc: { count: 1 } },
-      { new: true }
+      {
+        new: true,
+      }
     );
 
     if (!record) {
       throw new Error("No record found to increment.");
     }
 
-    return record.toObject();
+    var { _id, ...object } = record.toObject();
+
+    return object as RateLimitRecord;
   }
 }

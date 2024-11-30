@@ -1,3 +1,5 @@
+import { ExpressCallback } from "./express-callback.interface";
+import { Handler } from "./handler.interface";
 import { RateLimiter } from "./rate-limiter.interface";
 
 /**
@@ -9,6 +11,15 @@ import { RateLimiter } from "./rate-limiter.interface";
  */
 export interface RateLimiterOptions {
   ms: number;
-  maxRequest: number;
+  maxRequest:
+    | number
+    | ExpressCallback<number>
+    | Promise<ExpressCallback<number>>;
   storage?: RateLimiter;
+  message?: any;
+  statusCode?: number;
+  handler?: Handler;
+  keyGenerator?: ExpressCallback<string> | Promise<ExpressCallback<string>>;
+  skip?: ExpressCallback<boolean> | Promise<ExpressCallback<boolean>>;
+  requestPropertyName?: string;
 }
