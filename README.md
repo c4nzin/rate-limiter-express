@@ -4,8 +4,8 @@
 
 To install :
 
-```typescript
-npm i @canmertinyo/rate-limit-express
+```bash
+npm install express @canmertinyo/rate-limit-express ioredis mongoose
 ```
 
 # Example usage :
