@@ -1,6 +1,6 @@
 # Express Rate Limiter
 
-### A simple in-memory rate-limiting middleware for Express.js to restrict the number of requests a client can make within a given time. Ideal for lightweight use cases
+### This middleware helps to restrict the number of requests a client can make within a given time period. It's ideal for lightweight use cases and can be easily extended with in-memory, Redis, or MongoDB as storage options.
 
 To install :
 
