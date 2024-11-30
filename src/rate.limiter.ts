@@ -6,16 +6,16 @@ import { InMemoryStorage } from "./storages/in-memory.storage";
 const inMemoryStorage = new InMemoryStorage();
 
 export function rateLimiter(options: RateLimiterOptions) {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
     const ip = getIp(req);
     const currentTime = getTimestamp();
     const startTime = currentTime - options.ms;
     var storage = options.storage ?? inMemoryStorage;
 
-    var record = storage.getRateLimitRecord(ip);
+    var record = await storage.getRateLimitRecord(ip);
 
     if (!record) {
-      record = storage.createRateLimitRecord({
+      record = await storage.createRateLimitRecord({
         key: ip,
         count: 0,
         timestamp: currentTime,
@@ -23,12 +23,12 @@ export function rateLimiter(options: RateLimiterOptions) {
     }
 
     if (startTime > record.timestamp) {
-      record = storage.updateRateLimitRecord(ip, currentTime, 1);
+      record = await storage.updateRateLimitRecord(ip, currentTime, 1);
       return next();
     }
 
     if (record.count < options.maxRequest) {
-      record = storage.increment(record.key);
+      record = await storage.increment(record.key);
       return next();
     }
 

@@ -1,12 +1,12 @@
 import { RateLimitRecord } from "./rate-limit-record.interface";
 
 export interface RateLimiter {
-  getRateLimitRecord(key: string): RateLimitRecord | undefined;
-  createRateLimitRecord(record: RateLimitRecord): RateLimitRecord;
+  getRateLimitRecord(key: string): Promise<RateLimitRecord | undefined>;
+  createRateLimitRecord(record: RateLimitRecord): Promise<RateLimitRecord>;
   updateRateLimitRecord(
     key: string,
     timestamp: number,
     count: number
-  ): RateLimitRecord;
-  increment(key: string): RateLimitRecord;
+  ): Promise<RateLimitRecord>;
+  increment(key: string): Promise<RateLimitRecord>;
 }
