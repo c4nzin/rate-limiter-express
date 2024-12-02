@@ -2,6 +2,20 @@
 
 ### This set of packages provides flexible and highly customizable rate-limiting solutions for Node.js applications. The core package, @canmertinyo/rate-limiter-core, includes the in-memory implementation. To enable storage-backed rate limiting, you can integrate it with either @canmertinyo/rate-limiter-mongo for MongoDB or @canmertinyo/rate-limiter-redis for Redis.
 
+## Rate Limiter Options
+
+| **Option**         | **Type**   | **Description**                                                                           | **Default Value**        | **Example**                                             |
+| ------------------ | ---------- | ----------------------------------------------------------------------------------------- | ------------------------ | ------------------------------------------------------- |
+| `ms`               | `number`   | Time window in milliseconds for rate limiting.                                            | `60000` (1 minute)       | `ms: 60000`                                             |
+| `maxRequest`       | `number`   | Maximum requests allowed within the time window.                                          | `10`                     | `maxRequest: 10`                                        |
+| `storage`          | `object`   | Storage manager for rate limits (e.g., in-memory, MongoDB, Redis).                        | `undefined` (in-memory)  | `storage: mongoStorage`                                 |
+| `message`          | `string`   | Custom message returned when rate limit is exceeded.                                      | `"Too many requests"`    | `message: "Too many requests, please try again later."` |
+| `statusCode`       | `number`   | HTTP status code for rate limit responses.                                                | `429`                    | `statusCode: 429`                                       |
+| `keyGenerator`     | `function` | Function to generate a unique key for rate limiting (e.g., based on `req.ip` or headers). | `(req) => req.ip`        | `keyGenerator: (req) => req.ip`                         |
+| `skip`             | `function` | Function to bypass rate limiting for certain requests (e.g., based on user role).         | `undefined`              | `skip: (req) => req.headers["x-user-role"] === "admin"` |
+| `errorHandler`     | `function` | Error handling function for issues from the storage layer.                                | Logs error and proceeds. | `errorHandler: (req, res, next) => next()`              |
+| `passOnStoreError` | `boolean`  | Whether to allow requests to pass even if the storage fails.                              | `false`                  | `passOnStoreError: true`                                |
+
 To install (Core version only in memory):
 
 ```bash
