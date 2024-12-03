@@ -7,7 +7,7 @@ export class MemcachedStore implements RateLimiter {
 
   constructor(
     private readonly server: string | string[],
-    private readonly memcachedOptions: Memcached.options
+    private readonly memcachedOptions?: Memcached.options
   ) {}
 
   public async initialize(): Promise<RateLimiter> {
