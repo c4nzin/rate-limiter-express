@@ -10,7 +10,7 @@ export class MongoStorage implements RateLimiter {
     private readonly options?: mongoose.ConnectOptions
   ) {}
 
-  async initialize(): Promise<RateLimiter> {
+  public async initialize(): Promise<RateLimiter> {
     await mongoose.connect(this.uri, this.options);
     return this;
   }
