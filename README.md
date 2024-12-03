@@ -1,6 +1,6 @@
 # Express Rate Limiter
 
-### This set of packages provides flexible and highly customizable rate-limiting solutions for Node.js applications. The core package, @canmertinyo/rate-limiter-core, includes the in-memory implementation. To enable storage-backed rate limiting, you can integrate it with either @canmertinyo/rate-limiter-mongo for MongoDB or @canmertinyo/rate-limiter-redis for Redis.
+### This set of packages provides flexible and highly customizable rate-limiting solutions for Node.js applications. The core package, @canmertinyo/rate-limiter-core, includes the in-memory implementation. To enable storage-backed rate limiting, you can integrate it with either @canmertinyo/rate-limiter-mongo for MongoDB, @canmertinyo/rate-limiter-redis for Redis, or @canmertinyo/rate-limiter-memcached for Memcached.
 
 ## Rate Limiter Options
 
@@ -8,7 +8,7 @@
 | ------------------ | ---------- | ----------------------------------------------------------------------------------------- | ------------------------ | ------------------------------------------------------- |
 | `ms`               | `number`   | Time window in milliseconds for rate limiting.                                            | `60000` (1 minute)       | `ms: 60000`                                             |
 | `maxRequest`       | `number`   | Maximum requests allowed within the time window.                                          | `10`                     | `maxRequest: 10`                                        |
-| `storage`          | `object`   | Storage manager for rate limits (e.g., in-memory, MongoDB, Redis).                        | `undefined` (in-memory)  | `storage: mongoStorage`                                 |
+| `storage`          | `object`   | Storage manager for rate limits (e.g., in-memory, MongoDB, Redis, Memcached).             | `undefined` (in-memory)  | `storage: mongoStorage`                                 |
 | `message`          | `string`   | Custom message returned when rate limit is exceeded.                                      | `"Too many requests"`    | `message: "Too many requests, please try again later."` |
 | `statusCode`       | `number`   | HTTP status code for rate limit responses.                                                | `429`                    | `statusCode: 429`                                       |
 | `keyGenerator`     | `function` | Function to generate a unique key for rate limiting (e.g., based on `req.ip` or headers). | `(req) => req.ip`        | `keyGenerator: (req) => req.ip`                         |
@@ -20,10 +20,9 @@ To install (Core version only in memory):
 
 ```bash
 npm install @canmertinyo/rate-limiter-core
-
 ```
 
-To install (Mongo store)
+To install (Mongo store):
 
 ```bash
 npm install @canmertinyo/rate-limiter-mongo mongoose
@@ -33,6 +32,12 @@ To install (Redis store)
 
 ```bash
 npm install @canmertinyo/rate-limiter-redis ioredis
+```
+
+To install (Memcached store)
+
+```bash
+npm install @canmertinyo/rate-limiter-memcached memcached
 ```
 
 # Example usage :
@@ -142,4 +147,33 @@ app.use(
     passOnStoreError: true, // Pass requests even if storage fails
   })
 );
+```
+
+# Using memcached as a store manager
+```typescript
+import express from "express";
+import { MemcachedStore, rateLimiter } from "@canmertinyo/rate-limiter-memcached";
+
+const app = express();
+const port = 3001;
+
+// Configure the rate limiter with Memcached storage
+app.use(
+  rateLimiter({
+    ms: 5000, // Time window in milliseconds
+    maxRequest: 2, // Maximum requests allowed in the time window
+    storage: new MemcachedStore("127.0.0.1:11211", { //optons for customize db behaivor }), // Memcached configuration
+  })
+);
+
+// Sample route
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
+
 ```
