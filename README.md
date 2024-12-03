@@ -70,7 +70,8 @@ app.listen(3000, () => {
 
 ```typescript
 import express from "express";
-import { RedisStorage, RateLimiter } from "@canmertinyo/rate-limiter-redis";
+import { RedisStorage } from "@canmertinyo/rate-limiter-redis";
+import { rateLimiter } from "@canmertinyo/rate-limiter-core";
 
 const app = express();
 const port = 3001;
@@ -99,7 +100,8 @@ app.listen(port, () => {
 
 ```typescript
 import express from "express";
-import { MongoStorage, rateLimiter } from "@canmertinyo/rate-limiter-mongo";
+import { MongoStorage } from "@canmertinyo/rate-limiter-mongo";
+import { rateLimiter } from "@canmertinyo/rate-limiter-core";
 
 const app = express();
 const port = 3001;
@@ -152,7 +154,8 @@ app.use(
 # Using memcached as a store manager
 ```typescript
 import express from "express";
-import { MemcachedStore, rateLimiter } from "@canmertinyo/rate-limiter-memcached";
+import { MemcachedStore } from "@canmertinyo/rate-limiter-memcached";
+import { rateLimiter } from "@canmertinyo/rate-limiter-core";
 
 const app = express();
 const port = 3001;
